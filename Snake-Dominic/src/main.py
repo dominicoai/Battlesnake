@@ -12,6 +12,7 @@
 
 import random
 import typing
+from minimax import alphabeta
 
 
 # info is called when you create your Battlesnake on play.battlesnake.com
