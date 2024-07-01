@@ -24,7 +24,7 @@ def info() -> typing.Dict:
 
     return {
         "apiversion": "1",
-        "author": "novynova",  # TODO: Your Battlesnake Username
+        "author": "Gruppe 1",  # TODO: Your Battlesnake Username
         "color": "#888888",  # TODO: Choose color
         "head": "default",  # TODO: Choose head
         "tail": "default",  # TODO: Choose tail
@@ -45,7 +45,6 @@ def end(game_state: typing.Dict):
 # Valid moves are "up", "down", "left", or "right"
 # See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
-
     state = parse_game_state(game_state)
     best_move = get_best_move(state)
     print(f"MOVE {game_state['turn']}: {best_move}")
@@ -82,7 +81,7 @@ def get_best_move(state):
     return best_move
 
 def get_possible_moves(state):
-    # Gib alle möglichen Züge für die Schlange zurück (z.B. ["up", "down", "left", "right"])
+    
     return ["up", "down", "left", "right"]
 
 def simulate_move(state, move):
