@@ -94,27 +94,31 @@ def get_possible_moves(state):                          #filtert jetzt die deadl
 def simulate_move(state, move):
     # Simuliere einen Zug und gib den neuen Zustand zurück
     #simuliert jetzt mehr, auch in deiner nähe!
-    new_state = state.copy()
-    head = new_state['you']['body'][0]
-    new_head = head.copy()
+    #new_state = state.copy()
+    #head = new_state['you']['body'][0]
+    #new_head = head.copy()
+    
+    new_head_position = state["my_snake"]["head"].copy()
     
     if move == "up":
-        new_head['y'] += 1
+        new_head_position['y'] += 1
     elif move == "down":
-        new_head['y'] -= 1
+        new_head_position['y'] -= 1
     elif move == "left":
-        new_head['x'] -= 1
+        new_head_position['x'] -= 1
     elif move == "right":
-        new_head['x'] += 1
-        
-    new_state['you']['body'].insert(0, new_head)  # Neue Kopfposition hinzufügen
+        new_head_position['x'] += 1
+    
+    new_state = state.copy()    
+    new_state['my_snake']['body'].insert(0, new_head_position)  # Neue Kopfposition hinzufügen
+    new_state["my_snake"]["body"].pop()
     
     # Überprüfen, ob die Schlange Nahrung gefunden hat
-    if new_head in new_state['board']['food']:
-        new_state['board']['food'].remove(new_head)  # Entferne die Nahrung vom Brett
+    #if new_head in new_state['board']['food']:
+     #   new_state['board']['food'].remove(new_head)  # Entferne die Nahrung vom Brett
         # Schlange wächst, daher kein pop() hier
-    else:
-        new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
+    #else:
+     #   new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
 
     # Kollisionen überprüfen
     if check_collision(new_state):
@@ -125,22 +129,22 @@ def simulate_move(state, move):
     return new_state
 
 def check_collision(state):
-    head = state['you']['body'][0]
-    body = state['you']['body'][1:]  # Der Kopf wird nicht in den Körper einbezogen
+    head = state['my_snake']['head']#[0]
+    body = state['my_snake']['body']#[1:]  # Der Kopf wird nicht in den Körper einbezogen
     board_width = state['board']['width']
     board_height = state['board']['height']
-    opponents = state['board']['snakes']
+   # opponents = state['board']['snakes']
     
     # Kollision mit der Wand
     if head['x'] < 0 or head['x'] >= board_width or head['y'] < 0 or head['y'] >= board_height:
         return True
     
     # Kollision mit dem eigenen Körper
-    if head in body:
+    if head in body[1:]:
         return True
     
     # Kollision mit anderen Schlangen
-    for snake in opponents:
+    for snake in state['board']['snakes']:
         if head in snake['body']:
             return True
     
