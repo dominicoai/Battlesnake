@@ -94,14 +94,13 @@ def get_possible_moves(state):                          #filtert jetzt die deadl
     return safe_moves
 
 def simulate_move(state, move):
-    # Simuliere einen Zug und gib den neuen Zustand zurück
-    #simuliert jetzt mehr, auch in deiner nähe!
-    #new_state = state.copy()
-    #head = new_state['you']['body'][0]
-    #new_head = head.copy()
-    
-    new_head_position = state["my_snake"]["head"].copy()
-    
+    # Copy the current state to avoid mutating the original
+    new_state = state.copy()
+    new_state["my_snake"] = state["my_snake"].copy()
+    new_state["my_snake"]["body"] = state["my_snake"]["body"].copy()
+
+    # Update the head position based on the move
+    new_head_position = new_state["my_snake"]["head"].copy()
     if move == "up":
         new_head_position['y'] += 1
     elif move == "down":
@@ -110,24 +109,16 @@ def simulate_move(state, move):
         new_head_position['x'] -= 1
     elif move == "right":
         new_head_position['x'] += 1
-    
-    new_state = state.copy()    
-    new_state['my_snake']['body'].insert(0, new_head_position)  # Neue Kopfposition hinzufügen
-    new_state["my_snake"]["body"].pop()
-    
-    # Überprüfen, ob die Schlange Nahrung gefunden hat
-   # if new_head_position in new_state['board']['food']:
-     #   new_state['board']['food'].remove(new_head_position)  # Entferne die Nahrung vom Brett
-        # Schlange wächst, daher kein pop() hier
-    #else:
-    #    new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
 
-    # Kollisionen überprüfen
-    #if check_collision(new_state):
-      #  new_state['you']['health'] = 0  # Setze Gesundheit auf 0 bei Kollision
+    # Move the body
+    new_body = [new_head_position] + new_state["my_snake"]["body"][:-1]
+    new_state["my_snake"]["head"] = new_head_position
+    new_state["my_snake"]["body"] = new_body
 
-    # Weitere Logik hier, z.B. Wachstum bei Futter, Kollisionen etc.
-    
+    if check_collision(new_state):
+        
+        return None
+    # Return the new state
     return new_state
 
 def check_collision(state):
