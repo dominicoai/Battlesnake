@@ -47,6 +47,12 @@ def is_terminal(state):
     board_height = state["board"]["height"]
     body = state["my_snake"]["body"]
     opponents = state["board"]["snakes"]
+    possible_moves = {
+        "up": {"x": head["x"], "y": head["y"] + 1},
+        "down": {"x": head["x"], "y": head["y"] - 1},
+        "left": {"x": head["x"] - 1, "y": head["y"]},
+        "right": {"x": head["x"] + 1, "y": head["y"]}
+    }
     
     if head["x"] < 0 or head["x"] >= board_width or head["y"] < 0 or head["y"] >= board_height:
         return True
