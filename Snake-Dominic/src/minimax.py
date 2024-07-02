@@ -34,7 +34,7 @@ def alphabeta(state, depth, alpha, beta, maximizing_player):
     else:
         min_eval = math.inf
         for next in get_next(state):
-            eval = alphabeta(next, depth -1, alpha, beta, True)
+            eval = alphabeta(next, depth - 1, alpha, beta, True)
             min_eval = min(min_eval, eval)
             beta = min(beta, eval)
             if beta <= alpha:

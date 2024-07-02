@@ -68,7 +68,7 @@ def parse_game_state(data):
     return parsed_state
 
 def get_best_move(state):
-    best_move = None
+    best_move = []
     best_value = -math.inf
 
     for move in get_possible_moves(state):
@@ -76,9 +76,11 @@ def get_best_move(state):
         move_value = alphabeta(new_state, depth=3, alpha=-math.inf, beta=math.inf, maximizing_player=True)
         if move_value > best_value:
             best_value = move_value
-            best_move = move
+            best_move = [move]
+        elif move_value == best_value:
+            best_move.append(move)
 
-    return best_move
+    return random.choice(best_move) if best_move else None
 
 def get_possible_moves(state):                          #filtert jetzt die deadly moves raus
     possible_moves = ["up", "down", "left", "right"]
@@ -114,11 +116,11 @@ def simulate_move(state, move):
     new_state["my_snake"]["body"].pop()
     
     # Überprüfen, ob die Schlange Nahrung gefunden hat
-    #if new_head in new_state['board']['food']:
-     #   new_state['board']['food'].remove(new_head)  # Entferne die Nahrung vom Brett
+    if new_head_position in new_state['board']['food']:
+        new_state['board']['food'].remove(new_head_position)  # Entferne die Nahrung vom Brett
         # Schlange wächst, daher kein pop() hier
-    #else:
-     #   new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
+    else:
+        new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
 
     # Kollisionen überprüfen
     if check_collision(new_state):
