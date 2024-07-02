@@ -116,15 +116,15 @@ def simulate_move(state, move):
     new_state["my_snake"]["body"].pop()
     
     # Überprüfen, ob die Schlange Nahrung gefunden hat
-    if new_head_position in new_state['board']['food']:
-        new_state['board']['food'].remove(new_head_position)  # Entferne die Nahrung vom Brett
+   # if new_head_position in new_state['board']['food']:
+     #   new_state['board']['food'].remove(new_head_position)  # Entferne die Nahrung vom Brett
         # Schlange wächst, daher kein pop() hier
-    else:
-        new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
+    #else:
+    #    new_state['you']['body'].pop()  # Letztes Segment entfernen, wenn die Schlange nicht wächst
 
     # Kollisionen überprüfen
-    if check_collision(new_state):
-        new_state['you']['health'] = 0  # Setze Gesundheit auf 0 bei Kollision
+    #if check_collision(new_state):
+      #  new_state['you']['health'] = 0  # Setze Gesundheit auf 0 bei Kollision
 
     # Weitere Logik hier, z.B. Wachstum bei Futter, Kollisionen etc.
     
