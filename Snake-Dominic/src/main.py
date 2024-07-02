@@ -109,12 +109,14 @@ def simulate_move(state, move):
         new_head_position['x'] -= 1
     elif move == "right":
         new_head_position['x'] += 1
-    else:
-        raise ValueError(f"Invalid move: {move}")
+        
     # Move the body
     new_body = [new_head_position] + new_state["my_snake"]["body"][:-1]
     new_state["my_snake"]["head"] = new_head_position
     new_state["my_snake"]["body"] = new_body
+
+    if check_collision(new_state):
+        new_state["my_snake"]["health"] = 0
     
     # Return the new state
     return new_state

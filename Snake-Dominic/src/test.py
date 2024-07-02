@@ -1,34 +1,56 @@
 import unittest
-from unittest.mock import patch
-from minimax import alphabeta
-
-class TestAlphaBeta(unittest.TestCase):
+from main import simulate_move, check_collision
+class TestSimulateMove(unittest.TestCase):
     def setUp(self):
-        self.state = {"my_snake": {"head": {"x": 0, "y": 0}, "body": [{"x": 0, "y": 0}], "health": 100},
-                      "board": {"width": 3, "height": 3, "food": [], "snakes": []},
-                      "turn": 0}
+        self.base_state = {
+            "my_snake": {
+                "head": {"x": 5, "y": 5},
+                "body": [{"x": 5, "y": 5}, {"x": 5, "y": 4}, {"x": 5, "y": 3}],
+                "health": 100
+            },
+            "board": {
+                "width": 11,
+                "height": 11,
+                "food": [],
+                "snakes": []
+            },
+            "turn": 0
+        }
 
-    @patch('minimax.is_terminal', return_value=True)
-    @patch('minimax.evaluate', return_value=10)
-    def test_alphabeta_terminal_state(self, mock_evaluate, mock_is_terminal):
-        score = alphabeta(self.state, 1, -float('inf'), float('inf'), True)
-        self.assertEqual(score, 10)
+    def test_move_up(self):
+        expected_head = {"x": 5, "y": 6}
+        result = simulate_move(self.base_state, "up")
+        self.assertEqual(result["my_snake"]["head"], expected_head)
 
-    @patch('minimax.is_terminal', side_effect=[False, True, True])
-    @patch('minimax.get_next', return_value=[{"dummy_state_1": None}, {"dummy_state_2": None}])
-    @patch('minimax.evaluate', side_effect=[5, 7])
-    def test_alphabeta_non_terminal_maximizing(self, mock_evaluate, mock_get_next, mock_is_terminal):
-        score = alphabeta(self.state, 1, -float('inf'), float('inf'), True)
-        self.assertEqual(score, 7)
+    def test_move_down(self):
+        expected_head = {"x": 5, "y": 4}
+        result = simulate_move(self.base_state, "down")
+        self.assertEqual(result["my_snake"]["head"], expected_head)
 
-    @patch('minimax.is_terminal', side_effect=[False, True, True])
-    @patch('minimax.get_next', return_value=[{"dummy_state_1": None}, {"dummy_state_2": None}])
-    @patch('minimax.evaluate', side_effect=[5, 3])
-    def test_alphabeta_non_terminal_minimizing(self, mock_evaluate, mock_get_next, mock_is_terminal):
-        score = alphabeta(self.state, 1, -float('inf'), float('inf'), False)
-        self.assertEqual(score, 3)
+    def test_move_left(self):
+        expected_head = {"x": 4, "y": 5}
+        result = simulate_move(self.base_state, "left")
+        self.assertEqual(result["my_snake"]["head"], expected_head)
 
-    # Additional tests for pruning can be added here following a similar pattern
+    def test_move_right(self):
+        expected_head = {"x": 6, "y": 5}
+        result = simulate_move(self.base_state, "right")
+        self.assertEqual(result["my_snake"]["head"], expected_head)
+
+    def test_wall_collision(self):
+        # Move the snake to the edge of the board
+        self.base_state["my_snake"]["head"] = {"x": 0, "y": 5}
+        result = simulate_move(self.base_state, "left")
+        self.assertTrue(check_collision(result))
+
+    def test_body_collision(self):
+        # Attempt to move back into its own body
+        result = simulate_move(self.base_state, "down")
+        self.assertTrue(check_collision(result))
+
+    def test_no_collision(self):
+        result = simulate_move(self.base_state, "up")
+        self.assertFalse(check_collision(result))
 
 if __name__ == '__main__':
     unittest.main()
