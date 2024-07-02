@@ -73,7 +73,7 @@ def get_best_move(state):
 
     for move in get_possible_moves(state):
         new_state = simulate_move(state, move)
-        move_value = alphabeta(new_state, depth=3, alpha=-math.inf, beta=math.inf, maximizing_player=False)
+        move_value = alphabeta(new_state, depth=3, alpha=-math.inf, beta=math.inf, maximizing_player=True)
         if move_value > best_value:
             best_value = move_value
             best_move = move
