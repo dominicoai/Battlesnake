@@ -109,38 +109,36 @@ def simulate_move(state, move):
         new_head_position['x'] -= 1
     elif move == "right":
         new_head_position['x'] += 1
-
+    else:
+        raise ValueError(f"Invalid move: {move}")
     # Move the body
     new_body = [new_head_position] + new_state["my_snake"]["body"][:-1]
     new_state["my_snake"]["head"] = new_head_position
     new_state["my_snake"]["body"] = new_body
-
-    if check_collision(new_state):
-        
-        return None
+    
     # Return the new state
     return new_state
 
 def check_collision(state):
-    head = state['my_snake']['head']#[0]
-    body = state['my_snake']['body']#[1:]  # Der Kopf wird nicht in den Körper einbezogen
+    head = state['my_snake']['head']
+    body = state['my_snake']['body']
     board_width = state['board']['width']
     board_height = state['board']['height']
-   # opponents = state['board']['snakes']
     
-    # Kollision mit der Wand
+    # Collision with the wall
     if head['x'] < 0 or head['x'] >= board_width or head['y'] < 0 or head['y'] >= board_height:
         return True
     
-    # Kollision mit dem eigenen Körper
-    if head in body[1:]:
+    # Collision with its own body
+    if head in body[1:]:  # Exclude the head's current position
         return True
     
-    # Kollision mit anderen Schlangen
+    # Collision with other snakes
     for snake in state['board']['snakes']:
-        if head in snake['body']:
+        if head in snake['body'][1:]:  # Exclude comparing the head with other snake heads
             return True
     
+    # No collision detected
     return False
 
 # Start server when `python main.py` is run
