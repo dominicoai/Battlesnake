@@ -67,8 +67,7 @@ def is_terminal(state):
         if any(segment['x'] == head['x'] and segment['y'] == head['y'] for segment in snake['body']):
             return True
     
-    if not possible_moves(state):
-        return True
+
     
     return False
 
