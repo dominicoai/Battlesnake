@@ -98,7 +98,7 @@ def evaluate(state):
         food_distance_score = 0
         
     # Gesundheit
-    health_score = health / 100
+    health_score = health / 20
     
     # Freier Platz	
     space_score = calculate_space_score(state)
