@@ -1,5 +1,5 @@
 import math
-from main import get_possible_moves
+
 
 def minimax(state, depth, maximimizing_player):
     if depth == 0 or is_terminal(state):
@@ -61,7 +61,7 @@ def is_terminal(state):
         if any(segment['x'] == head['x'] and segment['y'] == head['y'] for segment in snake['body']):
             return True
     
-    if not get_possible_moves(state):
+    if not possible_moves(state):
         return True
     
     return False
