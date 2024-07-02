@@ -82,11 +82,11 @@ def evaluate(state):
     weight_opponents_distance = 0.15
     weight_length = 0.1
     
-    # Abstand zur Nahrung
+    # Abstand zur Nahrung (Manhattan-Distanz)
     if food:
         min_food_distance = min(
-            abs(head["x"] - food["x"]) + abs(head["y"] - food["y"])
-            for food in food
+            abs(head["x"] - f["x"]) + abs(head["y"] - f["y"])
+            for f in food
         )
         food_distance_score = 1 / (min_food_distance + 1)
     else:
@@ -98,7 +98,7 @@ def evaluate(state):
     # Freier Platz	
     space_score = calculate_space_score(state)
     
-    # Abstand zu Gegnern
+    # Abstand zu Gegnern (Manhattan-Distanz)
     min_opponents_distance = float("inf")
     for snake in opponents:
         for segment in snake["body"]:
