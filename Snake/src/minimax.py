@@ -58,8 +58,7 @@ def is_terminal(state):
         if any(segment['x'] == head['x'] and segment['y'] == head['y'] for segment in snake['body']):
             return True
     
-    if not possible_moves(state):
-        return True
+
     
     return False
 
@@ -91,7 +90,7 @@ def evaluate(state):
         food_distance_score = 0
         
     # Gesundheit
-    health_score = health / 15
+    health_score = health / 20
     
     # Freier Platz	
     space_score = calculate_space_score(state)

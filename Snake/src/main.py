@@ -27,9 +27,9 @@ def info() -> typing.Dict:
     return {
         "apiversion": "1",
         "author": "Gruppe 1",  # TODO: Your Battlesnake Username
-        "color": "#888888",  # TODO: Choose color
-        "head": "default",  # TODO: Choose head
-        "tail": "default",  # TODO: Choose tail
+        "color": "#e6f2ff",  # TODO: Choose color
+        "head": "ski",  # TODO: Choose head
+        "tail": "nr-booster",  # TODO: Choose tail
     }
 def start(game_state: typing.Dict):
     print("GAME START")
