@@ -15,10 +15,12 @@ import random
 import typing
 from minimax import alphabeta
 
+# Code by
+# Dominic Foraschick (Matrikelnummer: 222200429)
+# Tommy Stettin (Matrikelnummer: 221200375)
+# Johannes Peters (Matrikelnummer: 218205404)
+# Laurin Haase (Matrikelnummer: 217204840) 
 
-# info is called when you create your Battlesnake on play.battlesnake.com
-# and controls your Battlesnake's appearance
-# TIP: If you open your Battlesnake URL in a browser you should see this data
 def info() -> typing.Dict:
     print("INFO")
 
@@ -29,21 +31,12 @@ def info() -> typing.Dict:
         "head": "default",  # TODO: Choose head
         "tail": "default",  # TODO: Choose tail
     }
-
-
-# start is called when your Battlesnake begins a game
 def start(game_state: typing.Dict):
     print("GAME START")
 
-
-# end is called when your Battlesnake finishes a game
 def end(game_state: typing.Dict):
     print("GAME OVER\n")
 
-
-# move is called on every turn and returns your next move
-# Valid moves are "up", "down", "left", or "right"
-# See https://docs.battlesnake.com/api/example-move for available data
 def move(game_state: typing.Dict) -> typing.Dict:
     state = parse_game_state(game_state)
     best_move = get_best_move(state)
@@ -51,6 +44,7 @@ def move(game_state: typing.Dict) -> typing.Dict:
     return {"move": best_move}
 
 def parse_game_state(data):
+    # Formartiert die Daten in ein für uns nutzbares Format
     parsed_state = {
         "my_snake": {
             "head": data["you"]["body"][0],
@@ -68,12 +62,13 @@ def parse_game_state(data):
     return parsed_state
 
 def get_best_move(state):
+    # Findet den besten Zug für die Schlange
     best_move = []
     best_value = -math.inf
 
     for move in get_possible_moves(state):
         new_state = simulate_move(state, move)
-        move_value = alphabeta(new_state, depth=3, alpha=-math.inf, beta=math.inf, maximizing_player=True)
+        move_value = alphabeta(new_state, depth=3, alpha=-math.inf, beta=math.inf, maximizing_player=True) # minimax mit alpha-beta pruning
         if move_value > best_value:
             best_value = move_value
             best_move = [move]
@@ -94,12 +89,12 @@ def get_possible_moves(state):                          #filtert jetzt die deadl
     return safe_moves
 
 def simulate_move(state, move):
-    # Copy the current state to avoid mutating the original
+    # kopiert den aktuellen Zustand und führt den Zug aus
     new_state = state.copy()
     new_state["my_snake"] = state["my_snake"].copy()
     new_state["my_snake"]["body"] = state["my_snake"]["body"].copy()
 
-    # Update the head position based on the move
+    # update von der neuen Kopfposition
     new_head_position = new_state["my_snake"]["head"].copy()
     if move == "up":
         new_head_position['y'] += 1
@@ -110,7 +105,7 @@ def simulate_move(state, move):
     elif move == "right":
         new_head_position['x'] += 1
         
-    # Move the body
+    # bewegt die Schlange
     new_body = [new_head_position] + new_state["my_snake"]["body"][:-1]
     new_state["my_snake"]["head"] = new_head_position
     new_state["my_snake"]["body"] = new_body
@@ -118,29 +113,30 @@ def simulate_move(state, move):
     if check_collision(new_state):
         new_state["my_snake"]["health"] = 0
     
-    # Return the new state
+    # gibt den neuen Zustand zurück
     return new_state
 
 def check_collision(state):
+    # Prüft, ob die Schlange kollidiert
     head = state['my_snake']['head']
     body = state['my_snake']['body']
     board_width = state['board']['width']
     board_height = state['board']['height']
     
-    # Collision with the wall
+    # Kollision mit der Wand
     if head['x'] < 0 or head['x'] >= board_width or head['y'] < 0 or head['y'] >= board_height:
         return True
     
-    # Collision with its own body
-    if head in body[1:]:  # Exclude the head's current position
+    # Kollision mit sich selbst
+    if head in body[1:]:  # exkludiert den Kopf
         return True
     
-    # Collision with other snakes
+    # kolision mit anderen Schlangen
     for snake in state['board']['snakes']:
-        if head in snake['body'][1:]:  # Exclude comparing the head with other snake heads
+        if head in snake['body'][1:]:  # exkludiert den Kopf  
             return True
     
-    # No collision detected
+    # False wenn keine Kollision stattgefunden hat
     return False
 
 # Start server when `python main.py` is run

@@ -1,27 +1,17 @@
 import math
+# Code by
+# Dominic Foraschick (Matrikelnummer: 222200429)
+# Tommy Stettin (Matrikelnummer: 221200375)
+# Johannes Peters (Matrikelnummer: 218205404)
+# Laurin Haase (Matrikelnummer: 217204840) 
 
 
-def minimax(state, depth, maximimizing_player):
-    if depth == 0 or is_terminal(state):
-        return evaluate(state)
-    
-    if maximimizing_player:
-        max_eval = -math.inf
-        for next in get_next(state):
-            eval = minimax(next, depth - 1, False)
-            max_eval = max(max_eval, eval)
-        return max_eval
-    else:
-        min_eval = math.inf
-        for next in get_next(state):
-            eval = minimax(next, depth - 1, True)
-            min_eval = min(min_eval, eval)
-        return min_eval
-
+# Code für Minimax-Algorithmus mit Alpha-Beta-Pruning
 def alphabeta(state, depth, alpha, beta, maximizing_player):
     if depth == 0 or is_terminal(state):
         return evaluate(state)
-    
+    # alpha: bestes Ergebnis, das der maximierende Spieler bisher gefunden hat
+    # beta: bestes Ergebnis, das der minimierende Spieler bisher gefunden hat
     if maximizing_player:
         max_eval = -math.inf
         for next in get_next(state):
@@ -42,6 +32,7 @@ def alphabeta(state, depth, alpha, beta, maximizing_player):
         return min_eval
     
 def is_terminal(state):
+    # Prüfung, ob Schlange tot ist
     head = state["my_snake"]["head"]
     board_width = state["board"]["width"]
     board_height = state["board"]["height"]
@@ -73,6 +64,7 @@ def is_terminal(state):
     return False
 
 def evaluate(state):
+    # Zustand der Schlange
     head = state["my_snake"]["head"]
     health = state["my_snake"]["health"]
     body = state["my_snake"]["body"]
@@ -128,6 +120,7 @@ def evaluate(state):
     return evaluation 
 
 def calculate_space_score(state):
+    # Kaluliert den freien Platz auf dem Spielfeld
     head = state["my_snake"]["head"]
     board_width = state["board"]["width"]
     board_height = state["board"]["height"]
@@ -142,6 +135,7 @@ def calculate_space_score(state):
     return space_score / (board_width * board_height)
 
 def get_next(state):
+    # Mögliche nächste Zustände
     next = []
     head = state["my_snake"]["head"]
     body = state["my_snake"]["body"]
